@@ -3,6 +3,7 @@ import { useUiStore } from "../../store/uiStore";
 import { DslStudio } from "./DslStudio";
 import { QueryInspector } from "../../inspector/QueryInspector";
 import { PerformanceMonitor } from "../performance/PerformanceMonitor";
+import { AiAssistantPanel } from "./AiAssistantPanel";
 
 export function RightPanelHost() {
   const rightPanel = useUiStore((state) => state.rightPanel);
@@ -16,12 +17,7 @@ export function RightPanelHost() {
       {rightPanel === "dsl" && <DslStudio />}
       {rightPanel === "inspector" && <QueryInspector />}
       {rightPanel === "performance" && <PerformanceMonitor />}
-      {rightPanel === "ai" && (
-        <div className="rounded-lg border border-dashed border-white/10 p-4 text-sm text-slate-400">
-          {rightPanelLabel(rightPanel)} module is scaffolded and wired into the
-          shell.
-        </div>
-      )}
+      {rightPanel === "ai" && <AiAssistantPanel />}
     </Panel>
   );
 }
