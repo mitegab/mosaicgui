@@ -1,0 +1,52 @@
+/* ─── High contrast overrides ─────────────────────────────────────────────
+   Applied when body.high-contrast is set by useA11yStore
+   ─────────────────────────────────────────────────────────────────────────── */
+
+body.high-contrast {
+  --tw-bg-opacity: 1;
+  filter: contrast(1.4);
+}
+
+body.high-contrast .border-white\/10 {
+  border-color: rgba(255, 255, 255, 0.4) !important;
+}
+
+body.high-contrast .text-white\/40,
+body.high-contrast .text-white\/50,
+body.high-contrast .text-white\/60 {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+body.high-contrast button:focus-visible,
+body.high-contrast a:focus-visible,
+body.high-contrast input:focus-visible,
+body.high-contrast [tabindex]:focus-visible {
+  outline: 3px solid #fff !important;
+  outline-offset: 2px !important;
+}
+
+/* ─── Reduced motion ──────────────────────────────────────────────────────
+   Applied when body.reduce-motion is set by useA11yStore.
+   Equivalent to what @media (prefers-reduced-motion: reduce) achieves.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+body.reduce-motion *,
+body.reduce-motion *::before,
+body.reduce-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* ─── Font scaling ────────────────────────────────────────────────────────
+   --a11y-font-scale is set on :root by useA11yStore.setFontSize()
+   ─────────────────────────────────────────────────────────────────────────── */
+
+:root {
+  --a11y-font-scale: 1;
+}
+
+body {
+  font-size: calc(1rem * var(--a11y-font-scale));
+}
