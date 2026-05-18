@@ -1,18 +1,34 @@
-import { Activity, Bot, Braces, DatabaseZap, Gauge, GitBranch, Play } from 'lucide-react';
-import { Button } from '../ui/Button';
-import { useUiStore, type RightPanel } from '../../store/uiStore';
-import { useQueryStore } from '../../store/queryStore';
+import {
+  Activity,
+  Bot,
+  Braces,
+  DatabaseZap,
+  Gauge,
+  GitBranch,
+  Play,
+} from "lucide-react";
+import { Button } from "../ui/Button";
+import { useUiStore, type RightPanel } from "../../store/uiStore";
+import { useQueryStore } from "../../store/queryStore";
+import { useExecutionStore } from "../../store/executionStore";
+import { useExecuteQuery } from "../../features/query-builder/useExecuteQuery";
 
-const rightPanels: Array<{ id: RightPanel; label: string; icon: typeof Braces }> = [
-  { id: 'dsl', label: 'DSL Studio', icon: Braces },
-  { id: 'inspector', label: 'Inspector', icon: GitBranch },
-  { id: 'ai', label: 'AI Assistant', icon: Bot },
-  { id: 'performance', label: 'Performance', icon: Gauge },
+const rightPanels: Array<{
+  id: RightPanel;
+  label: string;
+  icon: typeof Braces;
+}> = [
+  { id: "dsl", label: "DSL Studio", icon: Braces },
+  { id: "inspector", label: "Inspector", icon: GitBranch },
+  { id: "ai", label: "AI Assistant", icon: Bot },
+  { id: "performance", label: "Performance", icon: Gauge },
 ];
 
 export function AppHeader() {
   const { rightPanel, setRightPanel } = useUiStore();
   const compileGraph = useQueryStore((state) => state.compileGraph);
+  const isRunning = useExecutionStore((state) => state.isRunning);
+  const { run, stop } = useExecuteQuery();
 
   return (
     <header className="flex h-16 shrink-0 items-center justify-between border-b border-white/10 bg-surface-950/80 px-4 backdrop-blur">
@@ -21,8 +37,12 @@ export function AppHeader() {
           <DatabaseZap className="h-5 w-5" />
         </div>
         <div>
-          <h1 className="text-lg font-semibold tracking-tight text-white">Mosaic GUI Studio</h1>
-          <p className="text-xs text-slate-400">Visual ORM Workbench · Query Graph · DSL Compiler · Inspector</p>
+          <h1 className="text-lg font-semibold tracking-tight text-white">
+            Mosaic GUI Studio
+          </h1>
+          <p className="text-xs text-slate-400">
+            Visual ORM Workbench · Query Graph · DSL Compiler · Inspector
+          </p>
         </div>
       </div>
 
@@ -34,7 +54,9 @@ export function AppHeader() {
               key={panel.id}
               onClick={() => setRightPanel(panel.id)}
               className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition ${
-                rightPanel === panel.id ? 'bg-accent-500 text-white' : 'text-slate-300 hover:bg-white/10'
+                rightPanel === panel.id
+                  ? "bg-accent-500 text-white"
+                  : "text-slate-300 hover:bg-white/10"
               }`}
             >
               <Icon className="h-4 w-4" />
@@ -48,8 +70,11 @@ export function AppHeader() {
         <Button variant="ghost" onClick={() => compileGraph()}>
           <Activity className="h-4 w-4" /> Compile
         </Button>
-        <Button variant="primary">
-          <Play className="h-4 w-4" /> Run Query
+        <Button
+          variant={isRunning ? "danger" : "primary"}
+          onClick={isRunning ? stop : run}
+        >
+          <Play className="h-4 w-4" /> {isRunning ? "Stop Query" : "Run Query"}
         </Button>
       </div>
     </header>
