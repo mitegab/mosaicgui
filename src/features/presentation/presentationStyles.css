@@ -1,0 +1,70 @@
+/* ─── Presentation / Kiosk Mode Styles ──────────────────────────────────────── */
+
+/* Hide elements marked as not relevant in presentation mode */
+body.presentation-mode .hide-in-presentation {
+  display: none !important;
+}
+
+/* ─── Font size scaling via data-font-size attribute ─────────────────────────── */
+
+body.presentation-mode[data-font-size="normal"] {
+  font-size: 1rem;
+}
+
+body.presentation-mode[data-font-size="large"] {
+  font-size: 1.2rem;
+}
+
+body.presentation-mode[data-font-size="large"] * {
+  font-size: inherit;
+}
+
+body.presentation-mode[data-font-size="xl"] {
+  font-size: 1.45rem;
+}
+
+body.presentation-mode[data-font-size="xl"] * {
+  font-size: inherit;
+}
+
+/* ─── Panel sizing in presentation mode ──────────────────────────────────────── */
+
+body.presentation-mode section[class*="Panel"],
+body.presentation-mode .mosaic-panel {
+  min-height: 240px;
+}
+
+/* ─── Result grids take full available height ────────────────────────────────── */
+
+body.presentation-mode .results-grid,
+body.presentation-mode [data-presentation="results"] {
+  height: 100% !important;
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+}
+
+/* ─── Larger text in node labels and inspector fields ────────────────────────── */
+
+body.presentation-mode .node-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+body.presentation-mode .field-row {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+/* ─── Boost contrast for legibility under projector lighting ─────────────────── */
+
+body.presentation-mode {
+  --text-primary:   #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --text-muted:     #94a3b8;
+}
+
+/* ─── Bottom padding so content is not obscured by the kiosk control bar ─────── */
+
+body.presentation-mode #root {
+  padding-bottom: 5rem;
+}

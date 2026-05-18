@@ -15,6 +15,7 @@ interface ExecutionState {
   setError: (error?: string) => void;
   addHistory: (entry: QueryHistoryEntry) => void;
   toggleBookmark: (entryId: string) => void;
+  clearHistory: () => void;
   clearResults: () => void;
 }
 
@@ -41,5 +42,6 @@ export const useExecutionStore = create<ExecutionState>((set) => ({
     set((state) => ({
       history: state.history.map((entry) => (entry.id === entryId ? { ...entry, bookmarked: !entry.bookmarked } : entry)),
     })),
+  clearHistory: () => set({ history: [] }),
   clearResults: () => set({ rows: [], metrics: undefined, orm: undefined, logs: [], executionPlan: [], error: undefined }),
 }));
