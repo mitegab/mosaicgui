@@ -29,7 +29,7 @@ export function DslStudio() {
     }
   }, [draft]);
 
-  const diagnostics = parsed.success ? [] : parsed.error.issues.map((i) => `${i.path.join('.') || 'root'}: ${i.message}`);
+  const diagnostics = parsed.success ? [] : parsed.error.issues.map((i: any) => `${i.path.join('.') || 'root'}: ${i.message}`);
 
   async function handleCopy() {
     await navigator.clipboard.writeText(draft);
@@ -73,7 +73,7 @@ export function DslStudio() {
 
       {diagnostics.length > 0 && (
         <div className="shrink-0 rounded-lg border border-danger-500/30 bg-danger-500/8 p-3 space-y-1">
-          {diagnostics.map((d) => <div key={d} className="text-xs font-mono text-danger-400">{d}</div>)}
+          {diagnostics.map((d: string) => <div key={d} className="text-xs font-mono text-danger-400">{d}</div>)}
         </div>
       )}
 

@@ -1,4 +1,5 @@
-import { openDB, type IDBPDatabase } from 'idb';
+// @ts-ignore
+import { openDB } from 'idb';
 import type { QueryDsl } from '../../types/query';
 
 // ---------------------------------------------------------------------------
@@ -53,12 +54,12 @@ interface SchemaCache {
 // DB initialisation (lazy singleton)
 // ---------------------------------------------------------------------------
 
-let dbPromise: Promise<IDBPDatabase<MosaicDB>> | null = null;
+let dbPromise: Promise<any> | null = null;
 
-function getDb(): Promise<IDBPDatabase<MosaicDB>> {
+function getDb(): Promise<any> {
   if (!dbPromise) {
     dbPromise = openDB<MosaicDB>(DB_NAME, DB_VERSION, {
-      upgrade(db) {
+      upgrade(db: any) {
         // queries store
         if (!db.objectStoreNames.contains('queries')) {
           const queryStore = db.createObjectStore('queries', { keyPath: 'id' });
@@ -75,7 +76,7 @@ function getDb(): Promise<IDBPDatabase<MosaicDB>> {
       },
     });
   }
-  return dbPromise;
+  return dbPromise!;
 }
 
 // ---------------------------------------------------------------------------

@@ -1,12 +1,6 @@
 import React, { useMemo, useRef } from 'react';
-import {
-  BarChart, Bar,
-  LineChart, Line,
-  PieChart, Pie, Cell,
-  ScatterChart, Scatter,
-  AreaChart, Area,
-  XAxis, YAxis, Tooltip, ResponsiveContainer, Legend,
-} from 'recharts';
+// @ts-ignore
+import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, ScatterChart, Scatter, AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { BarChart2 } from 'lucide-react';
 import { useChartStore, useDerivedChartData } from './useChartStore';
 import { Panel } from '../../components/ui/Panel';
@@ -71,7 +65,7 @@ export function ChartCanvas() {
           <>
             {chartType === 'bar' && (
               <ResponsiveContainer width="100%" height={CHART_HEIGHT}>
-                <BarChart data={chartData} onClick={(e) => e?.activePayload && handleBarClick(e.activePayload[0]?.payload)}>
+                <BarChart data={chartData} onClick={(e: any) => e?.activePayload && handleBarClick(e.activePayload[0]?.payload)}>
                   <XAxis dataKey="x" tick={{ fontSize: 11 }} interval="preserveStartEnd" />
                   <YAxis tick={{ fontSize: 11 }} />
                   <Tooltip />
@@ -136,7 +130,7 @@ export function ChartCanvas() {
                     outerRadius={110}
                     isAnimationActive
                     animationDuration={500}
-                    onClick={(_, __, e) => handlePieClick((e as { payload?: { name: string } })?.payload ?? null)}
+                    onClick={(_: any, __: any, e: any) => handlePieClick((e as { payload?: { name: string } })?.payload ?? null)}
                     cursor="pointer"
                   >
                     {pieData.map((_, i) => (

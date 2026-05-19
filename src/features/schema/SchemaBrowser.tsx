@@ -76,7 +76,7 @@ export function SchemaBrowser() {
   const activeModel =
     visibleModels.find((m) => m.name === selectedModel) ?? visibleModels[0];
   const activeField = selectedField
-    ? activeModel?.fields.find((f) => f.name === selectedField)
+    ? activeModel?.fields.find((f) => f.name === selectedField.name)
     : activeModel?.fields[0];
 
   useEffect(() => {
