@@ -1,16 +1,17 @@
 import { DragEvent, useCallback, useMemo } from 'react';
-import { addEdge, Background, Controls, MiniMap, ReactFlow, useEdgesState, useNodesState, type Connection, type NodeTypes } from '@xyflow/react';
+import { addEdge, Background, Controls, MiniMap, ReactFlow, useEdgesState, useNodesState, type Connection, type NodeTypes, ReactFlowProvider, useReactFlow } from '@xyflow/react';
 import { Button } from '../../components/ui/Button';
 import { useQueryStore } from '../../store/queryStore';
 import type { QueryGraphNode, QueryNodeKind } from '../../types/query';
 import { autoLayout, createQueryNode } from './nodeFactory';
 import { QueryNode } from './QueryNode';
 import { NodeInspector } from './NodeInspector';
+import { CanvasBookmarkBar } from '../../features/canvas/CanvasBookmarks';
 
 const nodeTypes: NodeTypes = { queryNode: QueryNode };
 const palette: QueryNodeKind[] = ['model', 'filter', 'condition', 'logic', 'output', 'group', 'subquery'];
 
-export function QueryGraphCanvas() {
+function QueryGraphCanvasInner() {
   const storeNodes = useQueryStore((state) => state.nodes);
   const storeEdges = useQueryStore((state) => state.edges);
   const selectedNodeId = useQueryStore((state) => state.selectedNodeId);
@@ -22,6 +23,16 @@ export function QueryGraphCanvas() {
 
   const [nodes, setNodes, onNodesChange] = useNodesState(storeNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(storeEdges);
+
+  const { getViewport, setViewport } = useReactFlow();
+
+  const handleJump = useCallback((bookmark: any) => {
+    setViewport({ x: bookmark.x, y: bookmark.y, zoom: bookmark.zoom }, { duration: 800 });
+  }, [setViewport]);
+
+  const handleGetViewport = useCallback(() => {
+    return getViewport();
+  }, [getViewport]);
 
   const selectedNode = useMemo(() => nodes.find((node) => node.id === selectedNodeId), [nodes, selectedNodeId]);
 
@@ -84,6 +95,11 @@ export function QueryGraphCanvas() {
             Validate
           </Button>
         </div>
+
+        <div className="absolute right-3 top-3 z-10">
+          <CanvasBookmarkBar onJump={handleJump} getCurrentViewport={handleGetViewport} />
+        </div>
+
         <ReactFlow
           nodes={nodes}
           edges={edges}
@@ -118,5 +134,13 @@ export function QueryGraphCanvas() {
         }}
       />
     </div>
+  );
+}
+
+export function QueryGraphCanvas() {
+  return (
+    <ReactFlowProvider>
+      <QueryGraphCanvasInner />
+    </ReactFlowProvider>
   );
 }
