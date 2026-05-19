@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import type { QueryDsl } from '../types/query';
 
 export const queryDslSchema = z.object({
   model: z.string().min(1, 'Model is required'),
@@ -22,7 +23,7 @@ export const queryDslSchema = z.object({
   offset: z.number().int().min(0).optional(),
   orderBy: z.array(z.string()).optional(),
   groups: z.array(z.lazy(() => queryDslSchema)).optional(),
-});
+}) as z.ZodType<QueryDsl>;
 
 export type QueryDslValidation = ReturnType<typeof queryDslSchema.safeParse>;
 

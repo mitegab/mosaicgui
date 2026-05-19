@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { FixedSizeGrid } from 'react-window';
+import { VariableSizeGrid } from 'react-window';
 import { Pin, PinOff, ArrowUp, ArrowDown, Copy, ClipboardPaste, AlertCircle } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import { Button } from '../../components/ui/Button';
@@ -41,8 +41,15 @@ export function SpreadsheetGrid({ rows: externalRows, height = 480 }: Spreadshee
   const [isModified, setIsModified] = useState(false);
   const [copyFeedback, setCopyFeedback] = useState<string | null>(null);
 
-  const gridRef = useRef<FixedSizeGrid>(null);
+  const gridRef = useRef<VariableSizeGrid>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Reset variable size grid cache on column width changes
+  useEffect(() => {
+    if (gridRef.current) {
+      gridRef.current.resetAfterColumnIndex(0);
+    }
+  }, [columnWidths]);
 
   // Sync external rows
   useEffect(() => {
@@ -381,12 +388,12 @@ export function SpreadsheetGrid({ rows: externalRows, height = 480 }: Spreadshee
 
         {/* Virtualized rows */}
         <div className="relative">
-          <FixedSizeGrid
+          <VariableSizeGrid
             ref={gridRef}
             columnCount={columns.length}
-            columnWidth={(idx) => columnWidths[idx] ?? DEFAULT_COL_WIDTH}
+            columnWidth={(idx: number) => columnWidths[idx] ?? DEFAULT_COL_WIDTH}
             rowCount={displayRows.length}
-            rowHeight={ROW_HEIGHT}
+            rowHeight={() => ROW_HEIGHT}
             height={height - HEADER_HEIGHT}
             width={Math.min(totalWidth, 9999)}
             itemData={itemData}
@@ -417,7 +424,7 @@ export function SpreadsheetGrid({ rows: externalRows, height = 480 }: Spreadshee
                 />
               </div>
             )}
-          </FixedSizeGrid>
+          </VariableSizeGrid>
         </div>
 
         {/* Footer */}

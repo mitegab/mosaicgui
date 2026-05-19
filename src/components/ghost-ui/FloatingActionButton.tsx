@@ -24,7 +24,7 @@ const tooltipSide: Record<Position, string> = {
   'bottom-left':  'left-full ml-2 top-1/2 -translate-y-1/2',
 };
 
-const tooltipOrigin: Record<Position, { initial: object; animate: object }> = {
+const tooltipOrigin: Record<Position, { initial: any; animate: any }> = {
   'top-right':    { initial: { opacity: 0, x: -6 }, animate: { opacity: 1, x: 0 } },
   'bottom-right': { initial: { opacity: 0, x: 6 },  animate: { opacity: 1, x: 0 } },
   'bottom-left':  { initial: { opacity: 0, x: -6 }, animate: { opacity: 1, x: 0 } },

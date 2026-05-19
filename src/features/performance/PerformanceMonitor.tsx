@@ -44,7 +44,7 @@ export function PerformanceMonitor() {
               <span className="text-[0.6rem] uppercase tracking-wide text-[var(--text-muted)] truncate">{label}</span>
             </div>
             <div className="text-base font-bold text-[var(--text-primary)] tabular-nums">{value}</div>
-            <Badge variant={variant} className="mt-1.5 text-[0.6rem]">{variant}</Badge>
+            <Badge variant={variant as any} className="mt-1.5 text-[0.6rem]">{variant}</Badge>
           </div>
         ))}
       </div>

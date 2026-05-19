@@ -19,6 +19,7 @@ export async function loadDuckDb(): Promise<DuckDbInstance> {
   loadPromise = (async () => {
     try {
       // Dynamic import so the heavy WASM bundle is not in the main chunk
+      // @ts-ignore
       const duckdb = await import('@duckdb/duckdb-wasm');
 
       // Choose the best available bundle
