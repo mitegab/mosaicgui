@@ -30,6 +30,7 @@ function LeftSidebar() {
             key={id}
             onClick={() => setTab(id)}
             className={cn(
+              
               'flex items-center gap-1.5 px-3 py-2 text-xs font-medium rounded-t-lg transition-colors -mb-px border-b-2',
               tab === id
                 ? 'border-django-400 text-white bg-white/5'
