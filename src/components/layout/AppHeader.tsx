@@ -9,39 +9,50 @@ import {
   Gauge,
   GitBranch,
   Moon,
-  Play,
-  Square,
   Sun,
   Wifi,
   WifiOff,
-} from 'lucide-react';
-import { Button } from '../ui/Button';
-import { Tooltip } from '../ui/Tooltip';
-import { Badge } from '../ui/Badge';
-import { useUiStore, type RightPanel } from '../../store/uiStore';
-import { useQueryStore } from '../../store/queryStore';
-import { useExecutionStore } from '../../store/executionStore';
-import { useExecuteQuery } from '../../features/query-builder/useExecuteQuery';
-import { useConnectionStatus } from '../../utils/useConnectionStatus';
-import { cn } from '../../utils/cn';
+} from "lucide-react";
+import { MorphButton } from "../../features/animations/MorphButton";
+import { Button } from "../ui/Button";
+import { Tooltip } from "../ui/Tooltip";
+import { Badge } from "../ui/Badge";
+import { useUiStore, type RightPanel } from "../../store/uiStore";
+import { useQueryStore } from "../../store/queryStore";
+import { useExecutionStore } from "../../store/executionStore";
+import { useExecuteQuery } from "../../features/query-builder/useExecuteQuery";
+import { useConnectionStatus } from "../../utils/useConnectionStatus";
+import { cn } from "../../utils/cn";
 
-const rightPanels: Array<{ id: RightPanel; label: string; icon: typeof Braces; shortcut: string }> = [
-  { id: 'dsl',         label: 'DSL Studio',   icon: Braces,     shortcut: '1' },
-  { id: 'inspector',   label: 'Inspector',    icon: GitBranch,  shortcut: '2' },
-  { id: 'ai',          label: 'AI Assistant', icon: Bot,        shortcut: '3' },
-  { id: 'performance', label: 'Performance',  icon: Gauge,      shortcut: '4' },
+const rightPanels: Array<{
+  id: RightPanel;
+  label: string;
+  icon: typeof Braces;
+  shortcut: string;
+}> = [
+  { id: "dsl", label: "DSL Studio", icon: Braces, shortcut: "1" },
+  { id: "inspector", label: "Inspector", icon: GitBranch, shortcut: "2" },
+  { id: "ai", label: "AI Assistant", icon: Bot, shortcut: "3" },
+  { id: "performance", label: "Performance", icon: Gauge, shortcut: "4" },
 ];
 
 export function AppHeader() {
-  const { rightPanel, setRightPanel, darkMode, toggleDarkMode, leftSidebarCollapsed, toggleLeftSidebar, setCommandPaletteOpen } = useUiStore();
-  const compileGraph  = useQueryStore((s) => s.compileGraph);
-  const isRunning     = useExecutionStore((s) => s.isRunning);
+  const {
+    rightPanel,
+    setRightPanel,
+    darkMode,
+    toggleDarkMode,
+    leftSidebarCollapsed,
+    toggleLeftSidebar,
+    setCommandPaletteOpen,
+  } = useUiStore();
+  const compileGraph = useQueryStore((s) => s.compileGraph);
+  const isRunning = useExecutionStore((s) => s.isRunning);
   const { run, stop } = useExecuteQuery();
   const { status, latency } = useConnectionStatus();
 
   return (
     <header className="flex h-14 shrink-0 items-center justify-between border-b border-[var(--border-sidebar)] bg-[var(--bg-header)] px-3 gap-3 z-20">
-
       {/* ── Left: brand + sidebar toggle ─────────────────────────── */}
       <div className="flex items-center gap-2.5 min-w-0">
         <Tooltip content="Toggle sidebar" shortcut="\\" side="bottom">
@@ -49,9 +60,11 @@ export function AppHeader() {
             onClick={toggleLeftSidebar}
             className="p-1.5 rounded-lg text-white/50 hover:text-white hover:bg-white/10 transition-colors"
           >
-            {leftSidebarCollapsed
-              ? <ChevronRight className="h-4 w-4" />
-              : <ChevronLeft  className="h-4 w-4" />}
+            {leftSidebarCollapsed ? (
+              <ChevronRight className="h-4 w-4" />
+            ) : (
+              <ChevronLeft className="h-4 w-4" />
+            )}
           </button>
         </Tooltip>
 
@@ -70,20 +83,30 @@ export function AppHeader() {
         </div>
 
         {/* Connection pill */}
-        <div className={cn(
-          'hidden lg:flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[0.6875rem] font-medium border transition-colors',
-          status === 'connected'    && 'bg-success-500/10 text-success-400 border-success-500/20',
-          status === 'disconnected' && 'bg-danger-500/10  text-danger-400  border-danger-500/20',
-          status === 'checking'     && 'bg-white/5 text-white/30 border-white/10',
-        )}>
-          {status === 'connected'
-            ? <Wifi    className="h-3 w-3" />
-            : status === 'disconnected'
-            ? <WifiOff className="h-3 w-3" />
-            : <span className="h-2 w-2 rounded-full bg-current animate-pulse" />}
-          {status === 'connected'
-            ? latency !== null ? `${latency}ms` : 'Connected'
-            : status === 'disconnected' ? 'Offline' : 'Checking…'}
+        <div
+          className={cn(
+            "hidden lg:flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[0.6875rem] font-medium border transition-colors",
+            status === "connected" &&
+              "bg-success-500/10 text-success-400 border-success-500/20",
+            status === "disconnected" &&
+              "bg-danger-500/10  text-danger-400  border-danger-500/20",
+            status === "checking" && "bg-white/5 text-white/30 border-white/10",
+          )}
+        >
+          {status === "connected" ? (
+            <Wifi className="h-3 w-3" />
+          ) : status === "disconnected" ? (
+            <WifiOff className="h-3 w-3" />
+          ) : (
+            <span className="h-2 w-2 rounded-full bg-current animate-pulse" />
+          )}
+          {status === "connected"
+            ? latency !== null
+              ? `${latency}ms`
+              : "Connected"
+            : status === "disconnected"
+              ? "Offline"
+              : "Checking…"}
         </div>
       </div>
 
@@ -94,10 +117,10 @@ export function AppHeader() {
             <button
               onClick={() => setRightPanel(id)}
               className={cn(
-                'flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-all duration-150',
+                "flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-all duration-150",
                 rightPanel === id
-                  ? 'bg-django-400 text-white shadow-sm'
-                  : 'text-white/50 hover:text-white hover:bg-white/10',
+                  ? "bg-django-400 text-white shadow-sm"
+                  : "text-white/50 hover:text-white hover:bg-white/10",
               )}
             >
               <Icon className="h-3.5 w-3.5" />
@@ -133,27 +156,24 @@ export function AppHeader() {
           </Button>
         </Tooltip>
 
-        <Tooltip content={isRunning ? 'Stop query' : 'Run query'} shortcut="⌘↵" side="bottom">
-          <Button
-            variant={isRunning ? 'danger' : 'primary'}
-            size="sm"
-            onClick={isRunning ? stop : run}
-          >
-            {isRunning
-              ? <Square className="h-3.5 w-3.5" />
-              : <Play  className="h-3.5 w-3.5" />}
-            <span className="hidden sm:inline">{isRunning ? 'Stop' : 'Run'}</span>
-          </Button>
-        </Tooltip>
+        <MorphButton isRunning={isRunning} onRun={run} onStop={stop} />
 
         <div className="w-px h-5 bg-white/10 mx-0.5" />
 
-        <Tooltip content={darkMode ? 'Light mode' : 'Dark mode'} shortcut="⌘⇧D" side="bottom">
+        <Tooltip
+          content={darkMode ? "Light mode" : "Dark mode"}
+          shortcut="⌘⇧D"
+          side="bottom"
+        >
           <button
             onClick={toggleDarkMode}
             className="p-1.5 rounded-lg text-white/50 hover:text-white hover:bg-white/10 transition-colors"
           >
-            {darkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            {darkMode ? (
+              <Sun className="h-4 w-4" />
+            ) : (
+              <Moon className="h-4 w-4" />
+            )}
           </button>
         </Tooltip>
       </div>
