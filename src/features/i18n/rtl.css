@@ -1,0 +1,11 @@
+[dir='rtl'] .flip-rtl {
+  transform: scaleX(-1);
+}
+
+[dir='rtl'] .text-start {
+  text-align: right;
+}
+
+[dir='ltr'] .text-start {
+  text-align: left;
+}
