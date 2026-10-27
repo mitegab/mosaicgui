@@ -1,91 +1,94 @@
 # Mosaic GUI Studio
 
-Production-grade **Visual ORM Workbench** — a hybrid of VS Code + Neo4j Studio + Django Admin.
+> A visual ORM workbench for database schema inspection, graphical query authoring, and data exploration.
 
-Built with React 18 · TypeScript (strict) · Vite · TailwindCSS · Zustand · TanStack Query · **React Flow (@xyflow/react)** · Monaco Editor · Framer Motion · Recharts · Zod · Headless UI · Lucide React.
+Mosaic combines the graph exploration of Neo4j Studio, the code intelligence of Monaco/VS Code, and the relational management of Django Admin into a single unified workspace.
 
 ---
 
-## Running locally
+## Tech Stack
+
+- **Framework & Build:** React 18 · TypeScript · Vite · Tailwind CSS
+- **State & Data Management:** Zustand · TanStack Query · IndexedDB (local-first)
+- **Visual Canvas:** React Flow (`@xyflow/react`) · Smart edge routing
+- **Editor & Validation:** Monaco Editor · Zod
+- **Data Engine & Visualization:** DuckDB-Wasm · Virtualized Grid (`react-window`) · Recharts
+- **UI & Motion:** Headless UI · Lucide Icons · Framer Motion
+
+---
+
+## Quick Start
+
+### Prerequisites
+- Node.js 18+
+- npm 9+ or pnpm 8+
 
 ```bash
+# Install dependencies
 npm install
-npm run dev       # http://localhost:5173
-npm test          # Vitest unit suite
-npm run build     # Production build
-```
 
-The Vite dev server proxies `/api/*` → `http://localhost:8000` (Mosaic Core API).
+# Start local dev server (proxies /api/* to http://localhost:8000)
+npm run dev
+
+# Run unit tests
+npm test
+
+# Build for production
+npm run build
+```
 
 ---
 
-## Architecture
+## Key Capabilities
 
-```
+### Visual Query Builder & Schema Canvas
+- **Node-Based Querying:** Compose relational joins, aggregations, and filters visually on an infinite canvas using React Flow.
+- **Bi-Directional Sync:** Changes on the canvas translate automatically to DSL and ORM queries, and vice-versa.
+- **Schema Explorer:** Search tables, inspect column types and indexes, and trace relational foreign keys visually.
+
+### In-Browser Analytics & High-Capacity Grid
+- **DuckDB-Wasm Integration:** Execute fast local analytical queries and client-side aggregations directly inside the browser.
+- **Virtualized Data Grid:** Smoothly inspect and filter result sets exceeding 100k+ rows without UI lockups.
+- **Visual Analytics:** Pivot results into bar, line, and area charts with Recharts.
+
+### Developer Workspace & Ergonomics
+- **Monaco DSL Studio:** Integrated code editor with schema-aware autocomplete, inline linting, and hover documentation.
+- **Flexible Split-View:** Resizable docking panels, pop-out multi-window support via `BroadcastChannel`, and spatial navigation bookmarks.
+- **Local-First & Offline Resilience:** Optimistic workspace state backed by IndexedDB and a full undo/redo action stack.
+- **Command Palette (`⌘K`):** Global keyboard-driven navigation across entities, queries, views, and canvas bookmarks.
+
+---
+
+## Project Structure
+
+```text
 src/
-  api/            HTTP client, schemaApi, queryApi, mockSchema
-  ai/             Natural-language → DSL assistant
-  components/
-    layout/       AppHeader, AppShell (resizable split-view)
-    ui/           Button, Panel, Badge, Tooltip, ToastContainer
-    ghost-ui/     FloatingActionButton, RadialContextMenu, InlineEditable
-  engine/         graphToDsl, dslToGraph, dslSchema (Zod)
-  features/
-    a11y/         High-contrast, reduced-motion, ARIA live regions, focus trap
-    animations/   SkeletonLoader, MorphButton, StaggeredList, SpringModal, PageTransition
-    canvas/       SemanticZoom, CanvasBookmarks
-    charts/       Recharts canvas, ChartToolbar, PivotTable, useChartStore
-    clipboard/    clipboardUtils, ClipboardBar, NodeSnippetCopy, useClipboardHistory
-    command-palette/ CommandPalette, useCommandPalette, shortcutMap
-    data-grid/    SpreadsheetGrid (react-window 100k+), GridCell, useGridState
-    history/      commandTypes, useUndoRedo (Ctrl+Z/Y), HistoryPanel
-    inspector/    DslStudio (Monaco), AiAssistantPanel, RightPanelHost
-    local-first/  IndexedDB adapter, syncQueue, SyncStatusBar, useOptimisticQuery
-    monaco/       mosaicLanguage (autocomplete+hover), useMonacoTheme (custom dark theme)
-    multi-window/ usePopOut, BroadcastBridge (BroadcastChannel), PopOutButton
-    onboarding/   TourSpotlight, tourSteps, useTour (with confetti)
-    performance/  PerformanceMonitor dashboard
-    presentation/ usePresentationMode, PresentationOverlay (kiosk)
-    query-builder/ QueryWorkspace, StructuredQueryForm, useExecuteQuery
-    results/      ResultsExplorer (virtualized grid + row drawer + export)
-    schema/       SchemaBrowser (search, field metadata, relationship preview, diff)
-    session/      sessionSerializer, useSessionPersistence, SessionManager
-    split-view/   useResizablePanels, Gutter, LayoutManager
-    telemetry/    useFpsCounter, useMemoryMonitor, NetworkWaterfall, TelemetryHUD
-    theme-builder/ ThemeBuilder, ThemePreview
-    wasm-engine/  duckdbLoader (DuckDB Wasm), clientSideFilter, WasmQueryPanel
-  flows/query/    QueryGraphCanvas, QueryNode, NodeInspector, nodeFactory
-  graph/          AnimatedDataEdge (particles), SmartEdge, edgeRouter
-  inspector/      QueryInspector (DSL + ORM + plan + logs)
-  pages/          WorkspacePage
-  store/          queryStore · schemaStore · executionStore · uiStore · offlineStore · themeStore
-  types/          query · schema · execution · ai
-  utils/          cn, debounce, useKeyboardShortcuts, useConnectionStatus
+├── api/                  API clients, schema endpoints, and query executor
+├── components/
+│   ├── layout/           AppShell, AppHeader, resizable docking frames
+│   └── ui/               Design system primitives (buttons, panels, dialogs)
+├── engine/               Graph-to-DSL and DSL-to-graph translation layers
+├── features/
+│   ├── canvas/           Viewport controls, semantic zoom, and bookmarks
+│   ├── charts/           Recharts canvas, pivot tables, and chart toolbars
+│   ├── command-palette/  Global shortcut handler and command palette (⌘K)
+│   ├── data-grid/        Virtualized spreadsheet grid and cell formatters
+│   ├── history/          Undo/redo command pattern and history manager
+│   ├── local-first/      IndexedDB adapters and background sync queues
+│   ├── monaco/           Mosaic DSL language configuration and syntax highlighting
+│   ├── multi-window/     BroadcastChannel bridge and panel pop-outs
+│   ├── query-builder/    Query graph workspace, forms, and validation
+│   ├── results/          Data explorer, export utilities, and inspector
+│   ├── schema/           Schema catalog, metadata inspect, and relation graph
+│   └── wasm-engine/      DuckDB-Wasm client loader and execution pipeline
+├── flows/                React Flow custom node types, handles, and inspectors
+├── graph/                Edge routing and custom canvas connectors
+├── store/                Zustand stores (query, schema, UI, offline state)
+└── types/                TypeScript definitions for schemas, queries, and engine state
 ```
 
 ---
 
-## Feature matrix (all 20 implemented)
+## License
 
-| # | Feature | Key files |
-|---|---------|-----------|
-| 1 | Canvas infinite zoom & spatial navigation | `features/canvas/`, `useSemanticZoom`, `CanvasBookmarks`, viewport persistence |
-| 2 | Universal command palette (⌘K) | `features/command-palette/CommandPalette`, `shortcutMap` |
-| 3 | Local-first optimistic state | `store/offlineStore`, `features/local-first/` (IndexedDB, syncQueue, SyncStatusBar) |
-| 4 | Spreadsheet data grid (100k+ rows) | `features/data-grid/SpreadsheetGrid`, `GridCell`, `useGridState` |
-| 5 | Multi-window & pop-out | `features/multi-window/usePopOut`, `BroadcastBridge`, `PopOutButton` |
-| 6 | Theme builder | `store/themeStore`, `features/theme-builder/ThemeBuilder`, CSS variable injection |
-| 7 | DuckDB Wasm client-side query engine | `features/wasm-engine/duckdbLoader`, `clientSideFilter`, `WasmQueryPanel` |
-| 8 | Rich graph interactions | `graph/AnimatedDataEdge` (SVG particles), `SmartEdge`, `edgeRouter`, snap-to-grid |
-| 9 | Ghost UI & progressive disclosure | `components/ghost-ui/FloatingActionButton`, `RadialContextMenu`, `InlineEditable` |
-| 10 | Split-view tiling window manager | `features/split-view/`, `Gutter`, `LayoutManager`, resizable `AppShell` |
-| 11 | Monaco editor enhancements | `features/monaco/mosaicLanguage` (autocomplete, hover), `useMonacoTheme` |
-| 12 | Cross-device session hydration | `features/session/sessionSerializer`, `useSessionPersistence`, URL-hash handoff |
-| 13 | Client-side chart builder | `features/charts/ChartCanvas` (Recharts), `ChartToolbar`, `PivotTable` |
-| 14 | Accessibility | `features/a11y/` (ARIA live, FocusTrap, A11yToolbar, high-contrast CSS) |
-| 15 | Guided tours & onboarding | `features/onboarding/TourSpotlight`, confetti burst, localStorage completion flag |
-| 16 | Performance telemetry HUD | `features/telemetry/` (FPS, heap memory, NetworkWaterfall, TelemetryHUD) |
-| 17 | Undo/redo stack | `features/history/commandTypes`, `useUndoRedo` (Ctrl+Z/Y), `HistoryPanel` |
-| 18 | Micro-interactions & animations | `features/animations/` (SkeletonLoader, MorphButton, StaggeredList, SpringModal) |
-| 19 | Presentation & kiosk mode | `features/presentation/usePresentationMode`, `PresentationOverlay` |
-| 20 | Advanced clipboard integration | `features/clipboard/clipboardUtils`, `ClipboardBar`, `NodeSnippetCopy`, history |
+This project is licensed under the MIT License. See `LICENSE` for details.
